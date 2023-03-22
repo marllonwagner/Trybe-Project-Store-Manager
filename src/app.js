@@ -1,4 +1,5 @@
 const express = require('express');
+const isNameValid = require('./middlewares/index');
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.get('/', (_request, response) => {
 
 app.get('/products', productsController.getAll);
 app.get('/products/:id', productsController.getById);
-app.post('/products', productsController.insertProduct);
+app.post('/products', isNameValid, productsController.insertProduct);
 
 app.use(errorHandler);
 // não remova essa exportação, é para o avaliador funcionar
