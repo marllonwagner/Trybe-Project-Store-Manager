@@ -5,11 +5,12 @@ const insertSales = async (salesArray) => {
   const [{ insertId }] = await connection.execute(query);
 
   salesArray.map(async (e) => {
-    const query2 = 'INSERT INTO StoreManager.sales_products (product_id, quantity ) VALUES (? , ?)';
-    await connection.execute(query2, [e.productid, e.quantity]);
+    const query2 = `INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity )
+     VALUES (?, ?, ?)`;
+    await connection.execute(query2, [insertId, e.productId, e.quantity]);
   });
 
   return insertId;
 };
 
-module.exports = insertSales;
+module.exports = { insertSales };

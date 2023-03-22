@@ -1,3 +1,7 @@
 const isNameValid = require('./validateProductName');
+const isProdAndQuantValid = require('./validateSalesProdAndQuant');
 
-module.exports = isNameValid;
+module.exports = {
+  isNameValid,
+  isProdAndQuantValid,
+};

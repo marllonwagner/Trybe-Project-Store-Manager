@@ -5,4 +5,4 @@ const insertSales = async (salesArray) => {
   return { id, itemsSold: salesArray };
 };
 
-module.exports = insertSales;
+module.exports = { insertSales };
