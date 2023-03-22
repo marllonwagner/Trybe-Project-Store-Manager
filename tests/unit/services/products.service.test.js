@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 // const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById } = require('../../../src/services/products')
+const { getAll, getById, insertProduct } = require('../../../src/services/products')
 
 const products = require('../../../src/models/products')
 
@@ -46,7 +46,20 @@ describe('Products Services tests', () => {
           
      
     
+        });
+    
+  });
+
+  describe('Testing Function insertProduct', () => {
+    it('should return the new inserted product', async () => {
+
+      sinon.stub(products, 'insertProduct').resolves({id:1 , name : 'produto'});
+
+
+      await insertProduct();
+
     });
   });
+
   afterEach(sinon.restore);
 });
