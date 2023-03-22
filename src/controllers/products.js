@@ -18,8 +18,8 @@ const getById = async (req, res, next) => {
 const insertProduct = async (req, res, next) => {
   try {
     const { name } = req.body;
-    const product = await productsService.insertProduct(name);
-    res.status(200).json(product);
+    const NewProduct = await productsService.insertProduct(name);
+    res.status(201).json(NewProduct);
   } catch (error) {
     next(error);
   }

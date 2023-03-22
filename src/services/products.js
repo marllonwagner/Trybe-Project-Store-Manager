@@ -15,6 +15,15 @@ const getById = async (id) => {
   return product;
 };
 
+const insertProduct = async (name) => {
+  if (!name || name === '') {
+    throw httpErrGenerator(400, 'Product name must exists');
+  }
+  const id = await productsModel.insertProduct(name);
+  return { id, name };
+};
+
 module.exports = {
   getAll,
-  getById };
+  getById,
+insertProduct };
