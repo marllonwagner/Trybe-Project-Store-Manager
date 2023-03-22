@@ -11,7 +11,7 @@ const { getAll, getById } = require('../../../src/controllers/products')
 
 const  products  = require('../../../src/services/products')
 
-const { productsMock, productByIdMock } = require('../../mocks/productsMock');
+const { productsMock, productByIdMock } = require('../mocks/productsMock');
 
 describe('Products Controller tests', () => {
   describe('Testing Function getAll', () => {

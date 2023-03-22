@@ -2,14 +2,14 @@ const chai = require("chai");
 const sinon = require("sinon");
 const sinonChai = require('sinon-chai');
 
-const { expect } = chai;
+// const { expect } = chai;
 chai.use(sinonChai);
 
 const { getAll, getById } = require('../../../src/services/products')
 
 const products = require('../../../src/models/products')
 
-const { productsMock, productByIdMock } = require('../../mocks/productsMock');
+const { productsMock, productByIdMock } = require('../mocks/productsMock');
 
 describe('Products Services tests', () => {
   describe('Testing Function getAll', () => {
@@ -29,28 +29,24 @@ describe('Products Services tests', () => {
         params: { id: 3 }
       }
 
+
       sinon.stub(products, 'getById').resolves(productByIdMock);
 
       await getById(req);
 
     });
 
-
-  });
-
-  describe('Get error', () => {
-    it('should return an error if id is invalid', async () => {
+        it('should return an error if id is invalid', async () => {
       const req = {
         params: { id: 9 }
       }
 
+          
       sinon.stub(products, 'getById').resolves(undefined);
-
-      await getById(req);
-
-
+          
+     
+    
     });
-
-
   });
+  afterEach(sinon.restore);
 });
