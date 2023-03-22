@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const { getAll, getById } = require('../../../src/controllers/products')
 
-const errorHandler =  require('../../../src/middlewares/errorHandler')
+// const errorHandler =  require('../../../src/middlewares/errorHandler')
 
 const  products  = require('../../../src/services/products')
 
