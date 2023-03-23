@@ -18,6 +18,7 @@ app.get('/', (_request, response) => {
 app.get('/products', productsController.getAll);
 app.get('/products/:id', productsController.getById);
 app.get('/sales', salesController.getSales);
+app.get('/sales/:id', salesController.getSalesById);
 app.post('/products', isNameValid, productsController.insertProduct);
 app.post('/sales', isProdAndQuantValid, isQuantValid, isProdIdValid, salesController.insertSales);
 

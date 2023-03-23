@@ -15,6 +15,17 @@ const getSales = async (_req, res) => {
   res.status(200).json(sales);
 };
 
+const getSalesById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const salesById = await salesService.getSalesById(id);
+    res.status(200).json(salesById);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   insertSales,
-  getSales };
+  getSales,
+  getSalesById };
