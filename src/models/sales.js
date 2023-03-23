@@ -30,7 +30,6 @@ JOIN StoreManager.sales_products AS sp
 ON s.id = sp.sale_id
 WHERE sp.sale_id = (?);`;
   const [salesById] = await connection.execute(query, [id]);
-  console.log(salesById);
   return camelize(salesById);
 };
 
