@@ -13,4 +13,15 @@ const insertSales = async (salesArray) => {
   return insertId;
 };
 
-module.exports = { insertSales };
+const getSales = async () => {
+const query = `SELECT * 
+FROM StoreManager.sales AS s 
+JOIN StoreManager.sales_products AS sp 
+ON s.id = sp.sale_id; `;
+  const [sales] = await connection.execute(query);
+  return sales;
+};
+
+module.exports = {
+  insertSales,
+  getSales };

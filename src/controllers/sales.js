@@ -10,4 +10,11 @@ const insertSales = async (req, res, next) => {
   }
 };
 
-module.exports = { insertSales };
+const getSales = async (_req, res) => {
+  const sales = await salesService.getSales();
+  res.status(200).json(sales);
+};
+
+module.exports = {
+  insertSales,
+  getSales };

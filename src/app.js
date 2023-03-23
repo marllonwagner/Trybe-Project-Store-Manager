@@ -1,11 +1,11 @@
 const express = require('express');
-const { isNameValid, isProdAndQuantValid,
-  isQuantValid, isProdIdValid } = require('./middlewares/index');
 
 const app = express();
 
 app.use(express.json());
 
+const { isNameValid, isProdAndQuantValid,
+  isQuantValid, isProdIdValid } = require('./middlewares/index');
 const productsController = require('./controllers/products');
 const salesController = require('./controllers/sales');
 const errorHandler = require('./middlewares/errorHandler');
@@ -17,6 +17,7 @@ app.get('/', (_request, response) => {
 
 app.get('/products', productsController.getAll);
 app.get('/products/:id', productsController.getById);
+app.get('/sales', salesController.getSales);
 app.post('/products', isNameValid, productsController.insertProduct);
 app.post('/sales', isProdAndQuantValid, isQuantValid, isProdIdValid, salesController.insertSales);
 

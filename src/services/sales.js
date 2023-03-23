@@ -5,4 +5,11 @@ const insertSales = async (salesArray) => {
   return { id, itemsSold: salesArray };
 };
 
-module.exports = { insertSales };
+const getSales = async () => {
+  const sales = await salesModel.getSales();
+  return sales;
+};
+
+module.exports = {
+  insertSales,
+getSales };
