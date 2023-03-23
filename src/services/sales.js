@@ -20,8 +20,16 @@ const getSalesById = async (id) => {
   return saleById;
 };
 
+const deleteSales = async (id) => {
+  const response = await salesModel.deleteSales(id);
+  if (response === 0) {
+    throw httpErrGenerator(404, 'Sale not found');
+  }
+};
+
 module.exports = {
   insertSales,
   getSales,
   getSalesById,
+  deleteSales,
   httpErrGenerator };

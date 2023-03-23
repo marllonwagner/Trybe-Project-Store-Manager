@@ -33,7 +33,19 @@ WHERE sp.sale_id = (?);`;
   return camelize(salesById);
 };
 
+const deleteSales = async (id) => {
+  const query = `DELETE FROM StoreManager.sales
+  WHERE id = (?)`;
+  const query2 = `DELETE FROM StoreManager.sales_products
+  WHERE sale_id = (?)`;
+  const [response1] = await connection.execute(query, [id]);
+  const [response2] = await connection.execute(query2, [id]);
+
+  return response1.affectedRows + response2.affectedRows;
+};
+
 module.exports = {
   insertSales,
   getSales,
-  getSalesById };
+  getSalesById,
+  deleteSales };

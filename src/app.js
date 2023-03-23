@@ -23,6 +23,7 @@ app.post('/products', isNameValid, productsController.insertProduct);
 app.post('/sales', isProdAndQuantValid, isQuantValid, isProdIdValid, salesController.insertSales);
 app.put('/products/:id', isNameValid, productsController.updateProduct);
 app.delete('/products/:id', productsController.deleteProduct);
+app.delete('/sales/:id', salesController.deleteSales);
 
 app.use(errorHandler);
 // não remova essa exportação, é para o avaliador funcionar
