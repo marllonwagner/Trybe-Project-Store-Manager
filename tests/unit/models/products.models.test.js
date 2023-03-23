@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 // const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById, insertProduct, updateProduct } = require('../../../src/models/products')
+const { getAll, getById, insertProduct, updateProduct , deleteProduct} = require('../../../src/models/products')
 
 const connection = require('../../../src/models/connection')
 
@@ -50,6 +50,16 @@ describe('Products models tests', () => {
       sinon.stub(connection, 'execute').resolves([1]);
 
       await updateProduct()
+    });
+
+  });
+
+  describe('Delete Product Test', () => {
+    it('should return the affected Rows', async () => {
+
+      sinon.stub(connection, 'execute').resolves([1]);
+     
+      await deleteProduct()
     });
 
   });

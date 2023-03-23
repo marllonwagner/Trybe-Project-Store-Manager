@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById , insertProduct , updateProduct} = require('../../../src/controllers/products')
+const { getAll, getById , insertProduct , updateProduct, deleteProduct} = require('../../../src/controllers/products')
 
 // const errorHandler =  require('../../../src/middlewares/errorHandler')
 
@@ -187,6 +187,59 @@ describe('Products Controller tests', () => {
       expect(updateProductStub.calledOnceWithExactly('1', 'Mascara do Miranha')).to.be.true;
       expect(res.status.notCalled).to.be.true;
       expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
+    });
+
+
+  });
+
+
+  describe('Delete a product', () => {
+    it('should return only status code 204 ', async () => {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        send: sinon.stub()
+      }
+      const req = {
+        params: {
+          id: '1'
+        },
+      }
+      const next = sinon.stub()
+      const deleteProductStub = sinon.stub(products, 'deleteProduct').returns();
+
+      await deleteProduct(req, res, next);
+
+      expect(deleteProductStub.calledOnceWithExactly('1')).to.be.true;
+      expect(res.status.calledOnceWithExactly(204)).to.be.true;
+      expect(res.send.calledOnceWithExactly()).to.be.true;
+      expect(next.notCalled).to.be.true;
+
+      sinon.restore();
+
+    });
+
+    it('should call the next middleware function with an error if updateProduct throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        // json: sinon.stub()
+      }
+      const req = {
+        params: {
+          id: '8456465'
+        },
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const updateProductStub = sinon.stub(products, 'deleteProduct').throws(error);
+
+      await deleteProduct(req, res, next);
+
+      expect(updateProductStub.calledOnceWithExactly('8456465')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      // expect(res.json.notCalled).to.be.true;
       expect(next.calledOnceWithExactly(error)).to.be.true;
     });
 

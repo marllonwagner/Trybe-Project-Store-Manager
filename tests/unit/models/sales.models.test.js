@@ -17,7 +17,6 @@ describe('Sales models tests', () => {
 
       sinon.stub(connection, 'execute').resolves(mockGetSales);
 
-
       await getSales();
 
     });
@@ -27,7 +26,6 @@ describe('Sales models tests', () => {
     it('should return the specified sale by id', async () => {
 
       sinon.stub(connection, 'execute').resolves([[mockGetSaleById]]);
-
 
       await getSalesById(1)
     });
@@ -39,7 +37,6 @@ describe('Sales models tests', () => {
     it('should return  ', async () => {
 
       sinon.stub(connection, 'execute').resolves([1]);
-
 
       await insertSales(mockInsertSales)
     });

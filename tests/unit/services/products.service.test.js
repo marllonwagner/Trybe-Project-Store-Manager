@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById, insertProduct, updateProduct, httpErrGenerator } = require('../../../src/services/products')
+const { getAll, getById, insertProduct, updateProduct, deleteProduct, httpErrGenerator } = require('../../../src/services/products')
 
 const products = require('../../../src/models/products')
 
@@ -101,6 +101,29 @@ describe('Products Services tests', () => {
 
       expect(updateProductStub.calledOnceWithExactly(id, name)).to.be.true;
     });
+  });
+
+
+  describe('Testing Function deleteProduct', () => {
+    it('should return nothing', async () => {
+
+      sinon.stub(products, 'deleteProduct').resolves();
+      await deleteProduct();
+
+    });
+
+    it('should throw a 404 error if product is not found', async () => {
+      const updateProductStub = sinon.stub(products, 'deleteProduct').returns(0);
+      const id = '1';
+   
+      try {
+        await deleteProduct(id);
+      } catch (err) {
+        expect(err).to.eql(httpErrGenerator(404, 'Product not found'));
+      }
+      expect(updateProductStub.calledOnceWithExactly(id)).to.be.true;
+    });
+
   });
 
   afterEach(sinon.restore);
