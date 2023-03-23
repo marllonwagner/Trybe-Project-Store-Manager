@@ -20,7 +20,16 @@ const insertProduct = async (name) => {
   return { id, name };
 };
 
+const updateProduct = async (id, name) => {
+  const product = await productsModel.updateProduct(id, name);
+  if (product === 0) {
+    throw httpErrGenerator(404, 'Product not found');
+  }
+  return { id, name };
+};
+
 module.exports = {
   getAll,
   getById,
-insertProduct };
+  insertProduct,
+  updateProduct };

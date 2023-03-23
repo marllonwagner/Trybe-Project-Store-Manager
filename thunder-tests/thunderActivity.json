@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3001/products",
-    "url": "http://localhost:3001/sales/1",
-    "method": "GET",
+    "url": "http://localhost:3001/products/szdfsdfsd",
+    "method": "PUT",
     "sortNum": 0,
     "created": "2023-03-21T19:03:52.610Z",
-    "modified": "2023-03-23T02:07:56.448Z",
+    "modified": "2023-03-23T03:49:54.186Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "[\n  {\n    \"productId\": 2,\n    \"quantity\": 1\n  },\n  {\n    \"productId\": 2,\n    \"quantity\": 1\n  }\n]",
+      "raw": "{\n  \"name\": \"traje do Miranha\"\n}",
       "form": []
     },
     "tests": []

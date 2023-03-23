@@ -25,7 +25,20 @@ const insertProduct = async (req, res, next) => {
   }
 };
 
+const updateProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const product = await productsService.updateProduct(id, name);
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAll,
   getById,
-insertProduct };
+  insertProduct,
+  updateProduct,
+};
