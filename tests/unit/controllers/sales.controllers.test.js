@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { insertSales, getSales, getSalesById } = require('../../../src/controllers/sales')
+const { insertSales, getSales, getSalesById, deleteSales } = require('../../../src/controllers/sales')
 
 // const errorHandler =  require('../../../src/middlewares/errorHandler')
 
@@ -117,4 +117,50 @@ describe('Sales Controller tests', () => {
 
 
   });
+
+
+  describe('Delete sales by Id', () => {
+    it('should delete a sale / status code 204 ', async () => {
+      const res = {}
+      const req = {
+        params: { id: 1 }
+      }
+      const next = () => { }
+
+      res.status = sinon.stub().returns(res);
+      sinon.stub(sales, 'deleteSales').resolves();
+
+      await deleteSales(req, res, next);
+
+      expect(res.status).to.have.been.calledWith(204)
+
+      sinon.restore()
+
+    });
+
+
+    it('should call the next middleware function with an error if getById throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        params: { id: '1' }
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const deleteSalesStub = sinon.stub(sales, 'deleteSales').throws(error);
+
+      await deleteSales(req, res, next);
+
+      expect(deleteSalesStub.calledOnceWithExactly('1')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
+    });
+
+  });
+
 });

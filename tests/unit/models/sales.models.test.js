@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 // const { expect } = chai;
 chai.use(sinonChai);
 
-const { getSales, getSalesById, insertSales } = require('../../../src/models/sales')
+const { getSales, getSalesById, insertSales, deleteSales } = require('../../../src/models/sales')
 
 const connection = require('../../../src/models/connection')
 
@@ -42,6 +42,17 @@ describe('Sales models tests', () => {
     });
 
   });
+
+  describe('Delete Sales', () => {
+    it('should return nothing  ', async () => {
+
+      sinon.stub(connection, 'execute').resolves([1]);
+
+      await deleteSales()
+    });
+
+  });
+
 
   afterEach(sinon.restore);
 
