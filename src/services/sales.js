@@ -23,4 +23,5 @@ const getSalesById = async (id) => {
 module.exports = {
   insertSales,
   getSales,
-  getSalesById };
+  getSalesById,
+  httpErrGenerator };

@@ -32,4 +32,5 @@ module.exports = {
   getAll,
   getById,
   insertProduct,
-  updateProduct };
+  updateProduct,
+  httpErrGenerator };

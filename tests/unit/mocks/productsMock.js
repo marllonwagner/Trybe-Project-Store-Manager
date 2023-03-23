@@ -21,7 +21,16 @@ const productByIdMock = [
   }
 ]
 
+const ProductUpdateMock = [
+  {
+    "id": 1,
+    "name": "Carro do Miranha"
+  }
+]
+
+
 module.exports = {
   productsMock,
-  productByIdMock
+  productByIdMock,
+  ProductUpdateMock
 }

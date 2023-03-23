@@ -5,13 +5,13 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById , insertProduct } = require('../../../src/controllers/products')
+const { getAll, getById , insertProduct , updateProduct} = require('../../../src/controllers/products')
 
 // const errorHandler =  require('../../../src/middlewares/errorHandler')
 
 const  products  = require('../../../src/services/products')
 
-const { productsMock, productByIdMock } = require('../mocks/productsMock');
+const { productsMock, productByIdMock , ProductUpdateMock} = require('../mocks/productsMock');
 
 describe('Products Controller tests', () => {
   describe('Testing Function getAll', () => {
@@ -37,7 +37,7 @@ describe('Products Controller tests', () => {
       const req = {
         params: { id: 3 }
       }
-      const next = () => { }
+      const next = sinon.stub()
 
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
@@ -48,6 +48,32 @@ describe('Products Controller tests', () => {
       expect(res.status).to.have.been.calledWith(200)
       expect(res.json).to.have.been.calledWith(productByIdMock)
 
+      sinon.restore();
+
+    });
+
+    it('should call the next middleware function with an error if getById throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        params: {
+          id: '3'
+        }
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const getByIdProductStub = sinon.stub(products, 'getById').throws(error);
+
+      await getById(req, res, next);
+
+      expect(getByIdProductStub.calledOnceWithExactly('3')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
     });
 
 
@@ -55,23 +81,116 @@ describe('Products Controller tests', () => {
 
   describe('Post a product', () => {
     it('should return only the new posted product and status code 201 ', async () => {
-      const res = {}
-      const req = {
-        name: 'Product Y'
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
       }
-      const next = () => {}
-  
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns();
-      sinon.stub(products, 'insertProduct').resolves();
-      
-      await insertProduct(req, res , next);
+      const req = {
+        body: {
+          name: 'Mascara do Miranha'
+        }
+      }
+      const next = sinon.stub()
+      const product = { name: 'Mascara do Miranha' };
+      const insertProductStub = sinon.stub(products, 'insertProduct').returns(product);
 
-      // expect(res.status).to.have.been.calledWith(201)
-      // expect(res.json).to.have.been.calledWith()
+      await insertProduct(req, res, next);
 
+      expect(insertProductStub.calledOnceWithExactly( 'Mascara do Miranha')).to.be.true;
+      expect(res.status.calledOnceWithExactly(201)).to.be.true;
+      expect(res.json.calledOnceWithExactly(product)).to.be.true;
+      expect(next.notCalled).to.be.true;
+
+      sinon.restore();
+
+
+    });
+
+    it('should call the next middleware function with an error if insertProduct throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        body: {
+          name: 'Mascara do Miranha'
+        }
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const insertProductStub = sinon.stub(products, 'insertProduct').throws(error);
+
+      await insertProduct(req, res, next);
+
+      expect(insertProductStub.calledOnceWithExactly( 'Mascara do Miranha')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
+    });
+    
+
+
+  });
+
+  describe('Update a product', () => {
+    it('should return only the new updated product and status code 200 ', async () => {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = { 
+        params: {
+          id: '1'
+        },
+        body: {
+          name: 'Mascara do Miranha'
+        }
+      }
+      const next = sinon.stub()
+      const product = { id: '1', name: 'Mascara do Miranha' };
+      const updateProductStub = sinon.stub(products, 'updateProduct').returns(product);
+
+      await updateProduct(req, res, next);
+
+      expect(updateProductStub.calledOnceWithExactly('1', 'Mascara do Miranha')).to.be.true;
+      expect(res.status.calledOnceWithExactly(200)).to.be.true;
+      expect(res.json.calledOnceWithExactly(product)).to.be.true;
+      expect(next.notCalled).to.be.true;
+
+      sinon.restore();
+
+    });
+
+    it('should call the next middleware function with an error if updateProduct throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        params: {
+          id: '1'
+        },
+        body: {
+          name: 'Mascara do Miranha'
+        }
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const updateProductStub = sinon.stub(products, 'updateProduct').throws(error);
+
+      await updateProduct(req, res, next);
+
+      expect(updateProductStub.calledOnceWithExactly('1', 'Mascara do Miranha')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
     });
 
 
   });
+
 });

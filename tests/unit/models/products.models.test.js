@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 // const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById, insertProduct } = require('../../../src/models/products')
+const { getAll, getById, insertProduct, updateProduct } = require('../../../src/models/products')
 
 const connection = require('../../../src/models/connection')
 
@@ -17,7 +17,6 @@ describe('Products models tests', () => {
 
       sinon.stub(connection, 'execute').resolves(productsMock);
 
-
       await getAll();
 
     });
@@ -28,20 +27,29 @@ describe('Products models tests', () => {
 
       sinon.stub(connection, 'execute').resolves([[productByIdMock]]);
 
-
       await getById(3)
     });
 
   });
 
 
-  describe('Get product by Id', () => {
-    it('should return only one product', async () => {
+  describe('Insert Product Test', () => {
+    it('should return the inserted products', async () => {
 
       sinon.stub(connection, 'execute').resolves([1]);
 
-
       await insertProduct()
+    });
+
+  });
+
+
+  describe('Update Product Test', () => {
+    it('should return the updated product', async () => {
+
+      sinon.stub(connection, 'execute').resolves([1]);
+
+      await updateProduct()
     });
 
   });

@@ -2,10 +2,10 @@ const chai = require("chai");
 const sinon = require("sinon");
 const sinonChai = require('sinon-chai');
 
-// const { expect } = chai;
+const { expect } = chai;
 chai.use(sinonChai);
 
-const { getSales, getSalesById, insertSales  } = require('../../../src/services/sales')
+const { getSales, getSalesById, insertSales, httpErrGenerator } = require('../../../src/services/sales')
 
 const sales = require('../../../src/models/sales')
 
@@ -29,24 +29,25 @@ describe('Sales Services tests', () => {
         params: { id: 1 }
       }
 
-
       sinon.stub(sales, 'getSalesById').resolves(mockGetSaleById);
 
       await getSalesById(req);
 
     });
+    it('should throw a 404 error if Sale is not found', async () => {
+      const getSalesByIdStub = sinon.stub(sales, 'getSalesById').returns(0);
+      const id = '8554';
 
-    it('should return an error if id is invalid', async () => {
-      const req = {
-        params: { id: 9454 }
+
+      try {
+        await getSalesById(id);
+      } catch (err) {
+        expect(err).to.eql(httpErrGenerator(404, 'Sale not found'));
       }
 
-
-      sinon.stub(sales, 'getSalesById').resolves();
-
-
-
+      expect(getSalesByIdStub.calledOnceWithExactly(id)).to.be.true;
     });
+
 
   });
 

@@ -48,8 +48,32 @@ describe('Sales Controller tests', () => {
       expect(res.status).to.have.been.calledWith(200)
       expect(res.json).to.have.been.calledWith(mockGetSaleById)
 
+      sinon.restore()
+
     });
 
+
+    it('should call the next middleware function with an error if getById throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        params: {id: '1'}
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const getSalesByIdStub = sinon.stub(sales, 'getSalesById').throws(error);
+
+      await getSalesById(req, res, next);
+
+      expect(getSalesByIdStub.calledOnceWithExactly('1')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
+    });
 
   });
 
@@ -65,6 +89,30 @@ describe('Sales Controller tests', () => {
 
       await insertSales(req, res, next);
 
+      sinon.restore()
+
+    });
+
+    it('should call the next middleware function with an error if getById throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        body: mockInsertSales
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const insertSalesStub = sinon.stub(sales, 'insertSales').throws(error);
+
+      await insertSales(req, res, next);
+
+      expect(insertSalesStub.calledOnceWithExactly(mockInsertSales)).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
     });
 
 
