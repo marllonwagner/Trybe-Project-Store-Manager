@@ -7,6 +7,14 @@ const getAll = async () => {
   return products;
 };
   
+const getByName = async (q) => {
+  const product = await productsModel.getByName(q);
+  if (q === null) {
+    throw httpErrGenerator(404, 'Product not found');
+  }
+  return product;
+};
+
 const getById = async (id) => {
   const product = await productsModel.getById(id);
   if (!product) {
@@ -38,6 +46,7 @@ const deleteProduct = async (id) => {
 module.exports = {
   getAll,
   getById,
+  getByName,
   insertProduct,
   updateProduct,
   deleteProduct,

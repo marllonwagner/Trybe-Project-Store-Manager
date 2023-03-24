@@ -5,6 +5,16 @@ const getAll = async (_req, res) => {
 res.status(200).json(products);
 };
 
+const getByName = async (req, res, next) => {
+  try {
+  const { q } = req.query;
+  const products = await productsService.getByName(q);
+  res.status(200).json(products);
+} catch (error) {
+  next(error);
+}
+};
+
 const getById = async (req, res, next) => {
   try {
     const { id } = req.params; 
@@ -49,7 +59,9 @@ const deleteProduct = async (req, res, next) => {
 module.exports = {
   getAll,
   getById,
+  getByName,
   insertProduct,
   updateProduct,
   deleteProduct,
+
 };
