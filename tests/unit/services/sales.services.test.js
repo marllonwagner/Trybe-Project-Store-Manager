@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getSales, getSalesById, insertSales,deleteSales, httpErrGenerator } = require('../../../src/services/sales')
+const { getSales, getSalesById, insertSales, deleteSales, updateSales, httpErrGenerator } = require('../../../src/services/sales')
 
 const sales = require('../../../src/models/sales')
 
@@ -38,7 +38,6 @@ describe('Sales Services tests', () => {
       const getSalesByIdStub = sinon.stub(sales, 'getSalesById').returns(0);
       const id = '8554';
 
-
       try {
         await getSalesById(id);
       } catch (err) {
@@ -62,13 +61,10 @@ describe('Sales Services tests', () => {
     });
   });
 
-
   describe('Delete sales by Id', () => {
     it('should delete the sales ', async () => {
-   
 
       sinon.stub(sales, 'deleteSales').resolves();
-
       await deleteSales();
 
     });
@@ -84,6 +80,32 @@ describe('Sales Services tests', () => {
       }
 
       expect(deleteSalesStub.calledOnceWithExactly(id)).to.be.true;
+    });
+
+  });
+
+
+  describe('update sales by Id', () => {
+    it('should update the sales ', async () => {
+
+
+      sinon.stub(sales, 'updateSales').resolves(mockInsertSales);
+
+      await updateSales();
+
+    });
+    it('should throw a 404 error if Sale is not found', async () => {
+      const updateSalesStub = sinon.stub(sales, 'updateSales').returns(0);
+      const id = '8554';
+
+
+      try {
+        await updateSales(mockInsertSales, id);
+      } catch (err) {
+        expect(err).to.eql(httpErrGenerator(404, 'Sale not found'));
+      }
+
+      expect(updateSalesStub.calledOnceWithExactly(mockInsertSales, id)).to.be.true;
     });
 
 

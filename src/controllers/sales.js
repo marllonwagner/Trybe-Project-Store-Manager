@@ -39,8 +39,8 @@ const updateSales = async (req, res, next) => {
   try {
     const { id } = req.params;
     const salesArray = req.body;
-    const NewSale = await salesService.updateSales(salesArray, id);
-    res.status(200).json(NewSale);
+    const updatedSale = await salesService.updateSales(salesArray, id);
+    res.status(200).json(updatedSale);
   } catch (error) {
     next(error);
   }
