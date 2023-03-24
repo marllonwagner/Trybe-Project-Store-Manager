@@ -27,9 +27,18 @@ const deleteSales = async (id) => {
   }
 };
 
+const updateSales = async (salesArray, id) => {
+ const affectedRows = await salesModel.updateSales(salesArray, id);
+  if (!affectedRows || affectedRows < 1) {
+    throw httpErrGenerator(404, 'Sale not found');
+  }
+  return { saleId: id, itemsUpdated: salesArray };
+};
+
 module.exports = {
   insertSales,
   getSales,
   getSalesById,
   deleteSales,
+  updateSales,
   httpErrGenerator };
