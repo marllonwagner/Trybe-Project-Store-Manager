@@ -5,11 +5,11 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById, insertProduct, updateProduct, deleteProduct, httpErrGenerator } = require('../../../src/services/products')
+const { getAll, getById, getByName, insertProduct, updateProduct, deleteProduct, httpErrGenerator } = require('../../../src/services/products')
 
 const products = require('../../../src/models/products')
 
-const { productsMock, productByIdMock } = require('../mocks/productsMock');
+const { productsMock, productByIdMock, productsByNameMock } = require('../mocks/productsMock');
 
 describe('Products Services tests', () => {
   describe('Testing Function getAll', () => {
@@ -36,18 +36,6 @@ describe('Products Services tests', () => {
 
     });
 
-        it('should return an error if id is invalid', async () => {
-      const req = {
-        params: { id: 9 }
-      }
-
-          
-      sinon.stub(products, 'getById').resolves(undefined);
-          
-     
-    
-        });
-    
     it('should throw a 404 error if product is not found', async () => {
       const getByIdProductStub = sinon.stub(products, 'getById').returns(0);
       const id = '1';
@@ -63,8 +51,36 @@ describe('Products Services tests', () => {
     });
     
     
-    
   });
+
+  describe('Get product by Name', () => {
+    it('should return the product(s)', async () => {
+      const req = {
+        query: { q: 'Martelo' }
+      }
+
+      sinon.stub(products, 'getByName').resolves(productsByNameMock);
+
+      await getByName(req);
+
+    });
+
+    it('should throw a 404 error if product is not found', async () => {
+      const getByNameProductStub = sinon.stub(products, 'getByName').returns(0);
+      const q = null
+
+      try {
+        await getByName(q);
+      } catch (err) {
+        expect(err).to.eql(httpErrGenerator(404, 'Product not found'));
+      }
+
+      expect(getByNameProductStub.calledOnceWithExactly(q)).to.be.true;
+    });
+
+
+  });
+
 
   describe('Testing Function insertProduct', () => {
     it('should return the new inserted product', async () => {

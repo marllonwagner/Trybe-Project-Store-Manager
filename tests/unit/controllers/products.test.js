@@ -5,13 +5,13 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { getAll, getById , insertProduct , updateProduct, deleteProduct} = require('../../../src/controllers/products')
+const { getAll, getById, getByName, insertProduct , updateProduct, deleteProduct} = require('../../../src/controllers/products')
 
 // const errorHandler =  require('../../../src/middlewares/errorHandler')
 
 const  products  = require('../../../src/services/products')
 
-const { productsMock, productByIdMock , ProductUpdateMock} = require('../mocks/productsMock');
+const { productsMock, productByIdMock, ProductUpdateMock, productsByNameMock } = require('../mocks/productsMock');
 
 describe('Products Controller tests', () => {
   describe('Testing Function getAll', () => {
@@ -78,6 +78,55 @@ describe('Products Controller tests', () => {
 
 
   });
+
+
+  describe('Get product by Name', () => {
+    it('should return the correct product(s) and status code 200 ', async () => {
+      const res = {}
+      const req = {
+        query: { q: 'Martelo' }
+      }
+      const next = sinon.stub()
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(products, 'getByName').resolves(productsByNameMock);
+
+      await getByName(req, res, next);
+
+      expect(res.status).to.have.been.calledWith(200)
+      expect(res.json).to.have.been.calledWith(productsByNameMock)
+
+      sinon.restore();
+
+    });
+
+    it('should call the next middleware function with an error if getById throws an error', async () => {
+
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub()
+      }
+      const req = {
+        query: { q : 'Martelo'}
+          
+      }
+      const next = sinon.stub()
+
+      const error = new Error('Product not found');
+      const getByNameProductStub = sinon.stub(products, 'getByName').throws(error);
+
+      await getByName(req, res, next);
+
+      expect(getByNameProductStub.calledOnceWithExactly('Martelo')).to.be.true;
+      expect(res.status.notCalled).to.be.true;
+      expect(res.json.notCalled).to.be.true;
+      expect(next.calledOnceWithExactly(error)).to.be.true;
+    });
+
+
+  });
+
 
   describe('Post a product', () => {
     it('should return only the new posted product and status code 201 ', async () => {
